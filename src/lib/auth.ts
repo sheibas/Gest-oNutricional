@@ -52,7 +52,14 @@ export const authClient = {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || errorData.error || 'Erro ao realizar cadastro no Neon Auth');
+        const rawMsg = errorData.message || errorData.error || '';
+        if (rawMsg === 'Invalid origin') {
+          throw new Error('Origem da requisição não autorizada no servidor Neon Auth.');
+        }
+        if (rawMsg.toLowerCase().includes('already exists') || rawMsg.toLowerCase().includes('duplicate')) {
+          throw new Error('Já existe uma conta cadastrada com este e-mail.');
+        }
+        throw new Error(rawMsg || 'Erro ao realizar cadastro no Neon Auth');
       }
 
       const data = await response.json();
@@ -125,10 +132,15 @@ export const authClient = {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        if (response.status === 401 || response.status === 400) {
+        const rawMsg = errorData.message || errorData.error || '';
+        
+        if (rawMsg === 'Invalid origin') {
+          throw new Error('Origem da requisição não autorizada no servidor Neon Auth.');
+        }
+        if (response.status === 401 || (response.status === 400 && (rawMsg.toLowerCase().includes('credential') || rawMsg.toLowerCase().includes('password') || rawMsg.toLowerCase().includes('email')))) {
           throw new Error('Email ou senha incorretos. Verifique suas credenciais.');
         }
-        throw new Error(errorData.message || errorData.error || 'Não foi possível efetuar o login.');
+        throw new Error(rawMsg || 'Não foi possível efetuar o login.');
       }
 
       const data = await response.json();
@@ -144,6 +156,13 @@ export const authClient = {
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sessionData));
+
+      // Sincroniza o nutricionista na tabela nutricionistas do Neon
+      try {
+        await syncNutricionista(user.name, user.email);
+      } catch (dbErr) {
+        console.warn('Erro não bloqueante ao persistir na tabela nutricionistas:', dbErr);
+      }
 
       return { user };
     } catch (err: any) {
