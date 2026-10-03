@@ -34,6 +34,7 @@ export interface Paciente {
   nome: string;
   data_nascimento?: string | null;
   sexo?: string | null;
+  telefone?: string | null;
   whatsapp?: string | null;
   email?: string | null;
   peso_inicial?: number | null;
@@ -54,6 +55,7 @@ export interface Paciente {
   atividade_fisica_descricao?: string | null;
   observacoes?: string | null;
   created_at?: string;
+  ultima_consulta?: string | null;
 }
 
 export interface Consulta {
@@ -67,6 +69,13 @@ export interface Consulta {
   observacoes?: string | null;
   proximo_retorno?: string | null;
   created_at?: string;
+}
+
+export interface PlanoAlimentar {
+  id: string;
+  paciente_id: string;
+  conteudo: any;
+  created_at: string;
 }
 
 /**
@@ -214,18 +223,21 @@ export async function getPacientes(nutricionistaId: string): Promise<Paciente[]>
   try {
     const result = await sql`
       SELECT 
-        id, nutricionista_id, nome, 
-        to_char(data_nascimento, 'YYYY-MM-DD') as data_nascimento,
-        sexo, whatsapp, email, peso_inicial, altura,
-        objetivos, objetivo_texto, nivel_atividade,
-        patologias, restricoes_alimentares, alergias,
-        medicamentos, suplementos, refeicoes_por_dia,
-        horario_acorda, horario_dorme, litros_agua,
-        atividade_fisica, atividade_fisica_descricao, observacoes,
-        created_at
-      FROM pacientes
-      WHERE nutricionista_id = ${nutricionistaId}
-      ORDER BY nome ASC
+        p.id, p.nutricionista_id, p.nome, 
+        to_char(p.data_nascimento, 'YYYY-MM-DD') as data_nascimento,
+        p.sexo, p.telefone, p.whatsapp, p.email, p.peso_inicial, p.altura,
+        p.objetivos, p.objetivo_texto, p.nivel_atividade,
+        p.patologias, p.restricoes_alimentares, p.alergias,
+        p.medicamentos, p.suplementos, p.refeicoes_por_dia,
+        p.horario_acorda, p.horario_dorme, p.litros_agua,
+        p.atividade_fisica, p.atividade_fisica_descricao, p.observacoes,
+        p.created_at,
+        to_char(MAX(c.data_consulta), 'YYYY-MM-DD') as ultima_consulta
+      FROM pacientes p
+      LEFT JOIN consultas c ON c.paciente_id = p.id
+      WHERE p.nutricionista_id = ${nutricionistaId}
+      GROUP BY p.id
+      ORDER BY p.nome ASC
     `;
     return result as Paciente[];
   } catch (error) {
@@ -245,7 +257,7 @@ export async function getPacienteDetails(pacienteId: string): Promise<{ paciente
       SELECT 
         id, nutricionista_id, nome, 
         to_char(data_nascimento, 'YYYY-MM-DD') as data_nascimento,
-        sexo, whatsapp, email, peso_inicial, altura,
+        sexo, telefone, whatsapp, email, peso_inicial, altura,
         objetivos, objetivo_texto, nivel_atividade,
         patologias, restricoes_alimentares, alergias,
         medicamentos, suplementos, refeicoes_por_dia,
@@ -288,22 +300,54 @@ export async function createPaciente(data: Partial<Paciente>): Promise<Paciente 
   try {
     const rows = await sql`
       INSERT INTO pacientes (
-        nutricionista_id, nome, data_nascimento, sexo, whatsapp, email,
-        peso_inicial, altura, objetivo_texto, nivel_atividade,
-        medicamentos, suplementos, observacoes
+        nutricionista_id,
+        nome,
+        data_nascimento,
+        sexo,
+        telefone,
+        whatsapp,
+        email,
+        peso_inicial,
+        altura,
+        objetivos,
+        objetivo_texto,
+        nivel_atividade,
+        patologias,
+        restricoes_alimentares,
+        alergias,
+        medicamentos,
+        suplementos,
+        refeicoes_por_dia,
+        horario_acorda,
+        horario_dorme,
+        litros_agua,
+        atividade_fisica,
+        atividade_fisica_descricao,
+        observacoes
       ) VALUES (
         ${data.nutricionista_id},
         ${data.nome},
         ${data.data_nascimento || null},
         ${data.sexo || null},
+        ${data.telefone || null},
         ${data.whatsapp || null},
         ${data.email || null},
-        ${data.peso_inicial || null},
-        ${data.altura || null},
+        ${data.peso_inicial != null && !isNaN(data.peso_inicial) ? data.peso_inicial : null},
+        ${data.altura != null && !isNaN(data.altura) ? data.altura : null},
+        ${data.objetivos && data.objetivos.length > 0 ? data.objetivos : null},
         ${data.objetivo_texto || null},
         ${data.nivel_atividade || null},
+        ${data.patologias && data.patologias.length > 0 ? data.patologias : null},
+        ${data.restricoes_alimentares && data.restricoes_alimentares.length > 0 ? data.restricoes_alimentares : null},
+        ${data.alergias && data.alergias.length > 0 ? data.alergias : null},
         ${data.medicamentos || null},
         ${data.suplementos || null},
+        ${data.refeicoes_por_dia != null && !isNaN(data.refeicoes_por_dia) ? data.refeicoes_por_dia : null},
+        ${data.horario_acorda || null},
+        ${data.horario_dorme || null},
+        ${data.litros_agua != null && !isNaN(data.litros_agua) ? data.litros_agua : null},
+        ${data.atividade_fisica ?? null},
+        ${data.atividade_fisica_descricao || null},
         ${data.observacoes || null}
       )
       RETURNING *
@@ -342,5 +386,68 @@ export async function createConsulta(data: Partial<Consulta>): Promise<Consulta 
   } catch (error) {
     console.error('Erro ao registrar consulta:', error);
     throw error;
+  }
+}
+
+/**
+ * Atualiza os dados de um paciente existente no banco Neon
+ */
+export async function updatePaciente(id: string, data: Partial<Paciente>): Promise<Paciente | null> {
+  if (!sql || !id) return null;
+
+  try {
+    const rows = await sql`
+      UPDATE pacientes SET
+        nome = COALESCE(${data.nome}, nome),
+        data_nascimento = ${data.data_nascimento || null},
+        sexo = ${data.sexo || null},
+        telefone = ${data.telefone || null},
+        whatsapp = ${data.whatsapp || null},
+        email = ${data.email || null},
+        peso_inicial = ${data.peso_inicial != null && !isNaN(data.peso_inicial) ? data.peso_inicial : null},
+        altura = ${data.altura != null && !isNaN(data.altura) ? data.altura : null},
+        objetivos = ${data.objetivos && data.objetivos.length > 0 ? data.objetivos : null},
+        objetivo_texto = ${data.objetivo_texto || null},
+        nivel_atividade = ${data.nivel_atividade || null},
+        patologias = ${data.patologias && data.patologias.length > 0 ? data.patologias : null},
+        restricoes_alimentares = ${data.restricoes_alimentares && data.restricoes_alimentares.length > 0 ? data.restricoes_alimentares : null},
+        alergias = ${data.alergias && data.alergias.length > 0 ? data.alergias : null},
+        medicamentos = ${data.medicamentos || null},
+        suplementos = ${data.suplementos || null},
+        refeicoes_por_dia = ${data.refeicoes_por_dia != null && !isNaN(data.refeicoes_por_dia) ? data.refeicoes_por_dia : null},
+        horario_acorda = ${data.horario_acorda || null},
+        horario_dorme = ${data.horario_dorme || null},
+        litros_agua = ${data.litros_agua != null && !isNaN(data.litros_agua) ? data.litros_agua : null},
+        atividade_fisica = ${data.atividade_fisica ?? null},
+        atividade_fisica_descricao = ${data.atividade_fisica_descricao || null},
+        observacoes = ${data.observacoes || null}
+      WHERE id = ${id}
+      RETURNING *
+    `;
+
+    return rows.length > 0 ? (rows[0] as Paciente) : null;
+  } catch (error) {
+    console.error('Erro ao atualizar paciente:', error);
+    throw error;
+  }
+}
+
+/**
+ * Busca planos alimentares de um paciente
+ */
+export async function getPlanosAlimentares(pacienteId: string): Promise<PlanoAlimentar[]> {
+  if (!sql || !pacienteId) return [];
+
+  try {
+    const rows = await sql`
+      SELECT id, paciente_id, conteudo, to_char(created_at, 'YYYY-MM-DD"T"HH24:MI:SS') as created_at
+      FROM planos_alimentares
+      WHERE paciente_id = ${pacienteId}
+      ORDER BY created_at DESC
+    `;
+    return rows as PlanoAlimentar[];
+  } catch (error) {
+    console.error('Erro ao buscar planos alimentares:', error);
+    return [];
   }
 }

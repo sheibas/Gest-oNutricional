@@ -4,12 +4,12 @@ import { LayoutDashboard, Users, LogOut, Sparkles, PlusCircle } from 'lucide-rea
 import { type User } from '../lib/auth';
 
 interface SidebarProps {
-  currentView: 'dashboard' | 'pacientes';
-  onSelectView: (view: 'dashboard' | 'pacientes') => void;
+  currentView: 'dashboard' | 'pacientes' | 'novo-paciente' | 'perfil-paciente';
+  onSelectView: (view: 'dashboard' | 'pacientes' | 'novo-paciente') => void;
   user: User;
   onLogout: () => void;
   totalPacientesCount?: number;
-  onOpenNewPacienteModal?: () => void;
+  onOpenNovoPaciente?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -18,7 +18,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   user,
   onLogout,
   totalPacientesCount = 0,
-  onOpenNewPacienteModal,
+  onOpenNovoPaciente,
 }) => {
   const getInitials = (name: string) => {
     return (
@@ -55,17 +55,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Quick Action Button */}
-      {onOpenNewPacienteModal && (
-        <div className="px-4 pt-5 pb-2">
-          <button
-            onClick={onOpenNewPacienteModal}
-            className="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-semibold text-xs tracking-wide shadow-lg shadow-rose-950/40 flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] border border-rose-500/30"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>Novo Paciente</span>
-          </button>
-        </div>
-      )}
+      <div className="px-4 pt-5 pb-2">
+        <button
+          onClick={() => {
+            if (onOpenNovoPaciente) {
+              onOpenNovoPaciente();
+            } else {
+              onSelectView('novo-paciente');
+            }
+          }}
+          className={`w-full py-2.5 px-3.5 rounded-xl font-semibold text-xs tracking-wide shadow-lg flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] border cursor-pointer ${
+            currentView === 'novo-paciente'
+              ? 'bg-rose-600 text-white border-rose-400 shadow-rose-950/60 ring-2 ring-rose-500/40'
+              : 'bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white shadow-rose-950/40 border-rose-500/30'
+          }`}
+        >
+          <PlusCircle className="w-4 h-4" />
+          <span>Novo Paciente</span>
+        </button>
+      </div>
 
       {/* Navigation Links */}
       <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
@@ -75,7 +83,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = currentView === item.id;
+          const isActive =
+            currentView === item.id ||
+            (item.id === 'pacientes' &&
+              (currentView === 'novo-paciente' || currentView === 'perfil-paciente'));
 
           return (
             <button
