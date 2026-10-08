@@ -18,13 +18,10 @@ import {
   Dumbbell,
   Check,
   X,
-  Sparkles,
   Loader2,
   Save,
   CheckCircle2,
   AlertCircle,
-  FileText,
-  Eye,
 } from 'lucide-react';
 import {
   getPacienteDetails,
@@ -43,6 +40,7 @@ import {
   formatDateBR,
 } from '../lib/utils';
 import { WeightEvolutionChart } from './WeightEvolutionChart';
+import { PlanoAlimentarSection } from './PlanoAlimentarSection';
 
 interface PerfilPacienteViewProps {
   pacienteId: string;
@@ -1419,99 +1417,17 @@ export const PerfilPacienteView: React.FC<PerfilPacienteViewProps> = ({
       {/* ========================================================================= */}
       {/* SEÇÃO 3: PLANOS ALIMENTARES                                               */}
       {/* ========================================================================= */}
+      {/* ========================================================================= */}
+      {/* SEÇÃO 3: PLANOS ALIMENTARES (Prompt 6)                                    */}
+      {/* ========================================================================= */}
       {activeSection === 'planos' && (
-        <div className="space-y-6 animate-fade-in">
-          {/* Header da Seção de Planos com o Botão "Gerar Plano Alimentar" */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-zinc-900 via-zinc-950 to-zinc-900 border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl relative overflow-hidden">
-            <div className="relative z-10 space-y-1">
-              <div className="text-xs font-semibold text-rose-500 uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" /> IA Nutricional Integrada
-              </div>
-              <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-                Planos Alimentares Personalizados
-              </h3>
-              <p className="text-xs sm:text-sm text-zinc-400 max-w-lg">
-                Gere cardápios e planos estratégicos com inteligência artificial baseados nas metas, rotina e restrições do paciente.
-              </p>
-            </div>
-
-            {/* Botão "Gerar Plano Alimentar" bem visível (Prompt 5) */}
-            <button
-              type="button"
-              onClick={() => {
-                alert(
-                  'A funcionalidade de geração automática via inteligência artificial será conectada no Prompt 6!'
-                );
-              }}
-              className="relative z-10 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 via-red-600 to-rose-700 hover:from-rose-500 hover:to-red-500 text-white font-extrabold text-xs sm:text-sm tracking-wide shadow-xl shadow-rose-950/60 border border-rose-500/40 flex items-center justify-center gap-2.5 transition-all cursor-pointer active:scale-95 group shrink-0"
-            >
-              <Sparkles className="w-4 h-4 text-rose-200 group-hover:rotate-12 transition-transform" />
-              <span>Gerar Plano Alimentar</span>
-            </button>
-          </div>
-
-          {/* Histórico de Planos Salvos */}
-          <div className="space-y-4">
-            <div className="border-b border-zinc-800 pb-3">
-              <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                <FileText className="w-4 h-4 text-rose-400" />
-                Histórico de Planos ({planos.length})
-              </h4>
-              <p className="text-xs text-zinc-400 mt-0.5">
-                Planos alimentares arquivados em ordem cronológica decrescente.
-              </p>
-            </div>
-
-            {planos.length === 0 ? (
-              // Regra do Prompt 5: Se não houver planos salvos ainda, exibir a mensagem "Nenhum plano alimentar gerado ainda"
-              <div className="py-20 glass-panel rounded-3xl border border-zinc-800 text-center space-y-3">
-                <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto text-zinc-500 shadow-inner">
-                  <Utensils className="w-7 h-7 text-zinc-600" />
-                </div>
-                <h4 className="text-base font-bold text-zinc-200">
-                  Nenhum plano alimentar gerado ainda
-                </h4>
-                <p className="text-xs text-zinc-400 max-w-sm mx-auto">
-                  Utilize o botão acima para estruturar e gerar o primeiro plano alimentar deste paciente.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {planos.map((plano) => (
-                  <div
-                    key={plano.id}
-                    onClick={() => setSelectedPlano(plano)}
-                    className="p-5 rounded-2xl bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800/80 hover:border-rose-500/50 transition-all cursor-pointer group flex items-center justify-between gap-4"
-                  >
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-white group-hover:text-rose-400 transition-colors">
-                          Plano Alimentar
-                        </span>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-950/80 text-rose-300 border border-rose-500/30 font-semibold">
-                          Salvo
-                        </span>
-                      </div>
-                      <div className="text-xs text-zinc-400 flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-zinc-500" />
-                        <span>Gerado em {formatDateBR(plano.created_at?.split('T')[0])}</span>
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      className="px-3.5 py-1.5 rounded-xl bg-zinc-800 group-hover:bg-rose-600 text-zinc-300 group-hover:text-white text-xs font-semibold transition-colors flex items-center gap-1"
-                    >
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Ver Conteúdo</span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+        <PlanoAlimentarSection
+          paciente={paciente}
+          pacienteId={pacienteId}
+          onPlanoSaved={loadData}
+        />
       )}
+
 
       {/* ========================================================================= */}
       {/* MODAL DE NOVA CONSULTA (Prompt 5)                                         */}

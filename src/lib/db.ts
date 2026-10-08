@@ -71,12 +71,32 @@ export interface Consulta {
   created_at?: string;
 }
 
+export interface RefeicoesDoDia {
+  cafe_da_manha: string[];
+  lanche_manha: string[];
+  almoco: string[];
+  lanche_tarde: string[];
+  jantar: string[];
+}
+
+export interface DiaPlano {
+  dia: string;
+  refeicoes: RefeicoesDoDia;
+}
+
+export interface PlanoSemanalConteudo {
+  plano_semanal: DiaPlano[];
+  titulo?: string;
+  observacoes_gerais?: string;
+}
+
 export interface PlanoAlimentar {
   id: string;
   paciente_id: string;
-  conteudo: any;
+  conteudo: PlanoSemanalConteudo | any;
   created_at: string;
 }
+
 
 /**
  * Obtém ou cadastra o nutricionista logado na tabela nutricionistas do Neon
@@ -449,5 +469,47 @@ export async function getPlanosAlimentares(pacienteId: string): Promise<PlanoAli
   } catch (error) {
     console.error('Erro ao buscar planos alimentares:', error);
     return [];
+  }
+}
+
+/**
+ * Salva um novo plano alimentar para o paciente
+ */
+export async function createPlanoAlimentar(
+  pacienteId: string,
+  conteudo: any
+): Promise<PlanoAlimentar | null> {
+  if (!sql) throw new Error('Banco de dados não configurado.');
+  if (!pacienteId) throw new Error('ID do paciente é obrigatório.');
+
+  try {
+    const jsonConteudo = typeof conteudo === 'string' ? conteudo : JSON.stringify(conteudo);
+    const rows = await sql`
+      INSERT INTO planos_alimentares (paciente_id, conteudo)
+      VALUES (${pacienteId}, ${jsonConteudo}::jsonb)
+      RETURNING id, paciente_id, conteudo, to_char(created_at, 'YYYY-MM-DD"T"HH24:MI:SS') as created_at
+    `;
+    return (rows.length > 0 ? (rows[0] as PlanoAlimentar) : null);
+  } catch (error) {
+    console.error('Erro ao criar plano alimentar:', error);
+    throw error;
+  }
+}
+
+/**
+ * Remove um plano alimentar pelo ID
+ */
+export async function deletePlanoAlimentar(id: string): Promise<boolean> {
+  if (!sql || !id) return false;
+
+  try {
+    await sql`
+      DELETE FROM planos_alimentares
+      WHERE id = ${id}
+    `;
+    return true;
+  } catch (error) {
+    console.error('Erro ao remover plano alimentar:', error);
+    return false;
   }
 }
