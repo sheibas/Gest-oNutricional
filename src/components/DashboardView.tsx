@@ -11,7 +11,6 @@ import {
   CheckCircle2,
   CalendarCheck,
   ChevronRight,
-  Activity,
   Phone,
   Mail,
 } from 'lucide-react';
@@ -100,8 +99,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
       </div>
 
-      {/* Grid of the 3 Main Cards (Prompt 3 Requirements) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Grid of Main Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
         {/* CARD 1: Total de pacientes ativos */}
         <div
           onClick={onNavigateToPacientes}
@@ -172,39 +171,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </span>
           </div>
         </div>
-
-        {/* STAT OVERVIEW / HIGHLIGHT CARD */}
-        <div className="glass-panel p-6 rounded-3xl relative overflow-hidden group hover:border-rose-500/40 transition-all duration-300 text-left flex flex-col justify-between md:col-span-2 lg:col-span-1">
-          <div className="absolute -top-12 -right-12 w-32 h-32 bg-rose-600/10 rounded-full blur-2xl pointer-events-none" />
-
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-2xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                <Activity className="w-6 h-6" />
-              </div>
-              <span className="px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[11px] font-semibold">
-                Gestão Padel
-              </span>
-            </div>
-
-            <h3 className="text-zinc-400 text-xs font-semibold uppercase tracking-wider">
-              Status NutriPadel
-            </h3>
-            <div className="text-xl font-bold text-white mt-1">
-              Painel 100% Integrado
-            </div>
-          </div>
-
-          <div className="mt-6 pt-4 border-t border-zinc-800/80 text-xs text-zinc-400 flex items-center justify-between">
-            <span>Banco Neon Postgres</span>
-            <span className="text-emerald-400 font-semibold flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Sincronizado
-            </span>
-          </div>
-        </div>
       </div>
 
-      {/* CARD 3: Pacientes sem retorno (Full interactive section) */}
+      {/* Pacientes sem retorno (Full interactive section) */}
       <div className="glass-panel rounded-3xl p-6 sm:p-8 text-left border border-zinc-800 relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
           <div className="flex items-center gap-3">
@@ -214,7 +183,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg sm:text-xl font-bold text-white">
-                  Card 3 — Pacientes sem Retorno
+                  Pacientes sem Retorno
                 </h2>
                 {stats.pacientesSemRetorno.length > 0 && (
                   <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-bold">

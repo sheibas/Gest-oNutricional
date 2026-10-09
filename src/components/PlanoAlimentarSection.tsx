@@ -469,23 +469,23 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
   const diaAtual = planoAtivo?.plano_semanal[diaAtivoIndex];
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-6 sm:space-y-8 animate-fade-in pb-16">
       {/* ========================================================================= */}
       {/* BANNER PRINCIPAL COM OS BOTÕES DE AÇÃO                                    */}
       {/* ========================================================================= */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 border border-zinc-800 shadow-2xl relative overflow-hidden">
+      <div className="p-5 sm:p-8 rounded-3xl bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 border border-zinc-800 shadow-2xl relative overflow-hidden">
         {/* Glow de fundo */}
         <div className="absolute -top-24 -right-24 w-80 h-80 bg-rose-600/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5 sm:gap-6">
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Inteligência Artificial Integrada</span>
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight">
               Gerador Inteligente de Planos Alimentares
             </h3>
 
@@ -497,7 +497,7 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
             </p>
 
             {/* Badges do perfil do paciente */}
-            <div className="pt-2 flex flex-wrap gap-2 text-xs text-zinc-300">
+            <div className="pt-1 sm:pt-2 flex flex-wrap gap-1.5 sm:gap-2 text-xs text-zinc-300">
               {paciente?.objetivos && paciente.objetivos.length > 0 && (
                 <span className="px-2.5 py-1 rounded-lg bg-zinc-800/80 border border-zinc-700/50 flex items-center gap-1.5 text-[11px]">
                   🎯 Meta: {paciente.objetivos.slice(0, 2).join(', ')}
@@ -518,7 +518,7 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
           </div>
 
           {/* Botões de Ação */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 shrink-0">
             {/* Botão Secundário: Criar Plano Manual */}
             <button
               type="button"
@@ -535,7 +535,7 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
               type="button"
               onClick={handleGerarComIA}
               disabled={isGeneratingIA}
-              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 via-red-600 to-rose-700 hover:from-rose-500 hover:to-red-500 text-white font-extrabold text-sm tracking-wide shadow-xl shadow-rose-950/60 border border-rose-500/40 flex items-center justify-center gap-2.5 transition-all cursor-pointer active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group"
+              className="px-5 sm:px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 via-red-600 to-rose-700 hover:from-rose-500 hover:to-red-500 text-white font-extrabold text-xs sm:text-sm tracking-wide shadow-xl shadow-rose-950/60 border border-rose-500/40 flex items-center justify-center gap-2.5 transition-all cursor-pointer active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group"
             >
               {isGeneratingIA ? (
                 <>
@@ -690,7 +690,7 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
           </div>
 
           {/* Abas (Tabs) dos Dias da Semana */}
-          <div className="px-4 sm:px-6 pt-4 border-b border-zinc-800 bg-zinc-900/30 overflow-x-auto">
+          <div className="px-3 sm:px-6 pt-3 sm:pt-4 border-b border-zinc-800 bg-zinc-900/30 overflow-x-auto no-scrollbar">
             <div className="flex items-center gap-2 min-w-max pb-3">
               {planoAtivo.plano_semanal.map((diaItem, idx) => {
                 const isActive = diaAtivoIndex === idx;
@@ -699,7 +699,7 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
                     key={diaItem.dia}
                     type="button"
                     onClick={() => setDiaAtivoIndex(idx)}
-                    className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                    className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 ${
                       isActive
                         ? 'bg-rose-600 text-white shadow-lg shadow-rose-950/50 border border-rose-500/40'
                         : 'bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-zinc-800'
@@ -724,7 +724,7 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
 
           {/* Conteúdo do Dia Ativo: As 5 Refeições com seus 5 inputs cada */}
           {diaAtual && (
-            <div className="p-6 sm:p-8 space-y-6">
+            <div className="p-4 sm:p-8 space-y-6">
               <div className="flex items-center justify-between pb-2 border-b border-zinc-900">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-extrabold text-white">
@@ -737,12 +737,12 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
 
                 <div className="text-xs text-zinc-400 flex items-center gap-1.5">
                   <HelpCircle className="w-3.5 h-3.5 text-zinc-500" />
-                  <span>Todos os campos são editáveis diretamente</span>
+                  <span className="hidden sm:inline">Todos os campos são editáveis diretamente</span>
                 </div>
               </div>
 
               {/* Grid das 5 Refeições */}
-              <div className="space-y-6">
+              <div className="space-y-5 sm:space-y-6">
                 {REFEICOES_CONFIG.map((refeicao) => {
                   const Icon = refeicao.icone;
                   const opcoes = diaAtual.refeicoes[refeicao.key] || ['', '', '', '', ''];
@@ -750,7 +750,7 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
                   return (
                     <div
                       key={refeicao.key}
-                      className="p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700/80 transition-colors space-y-4"
+                      className="p-4 sm:p-5 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700/80 transition-colors space-y-3 sm:space-y-4"
                     >
                       {/* Header da Refeição */}
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -776,7 +776,7 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
                       </div>
 
                       {/* Os 5 inputs de texto preenchidos pela IA ou em branco */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 pt-1">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-3 pt-1">
                         {opcoes.map((opcaoTexto, opIdx) => (
                           <div key={opIdx} className="space-y-1">
                             <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
@@ -789,7 +789,7 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
                                 handleUpdateOpcao(refeicao.key, opIdx, e.target.value)
                               }
                               placeholder={`Ex: Opção ${opIdx + 1}...`}
-                              className="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-zinc-800 hover:border-zinc-700 focus:border-rose-500 text-zinc-200 text-xs leading-relaxed outline-none transition-all resize-none font-normal"
+                              className="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-zinc-800 hover:border-zinc-700 focus:border-rose-500 text-zinc-200 text-xs leading-relaxed outline-none transition-all resize-y min-h-[70px] font-normal"
                             />
                           </div>
                         ))}
@@ -800,8 +800,8 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
               </div>
 
               {/* Botão de Rodapé para salvar */}
-              <div className="pt-4 border-t border-zinc-800 flex items-center justify-between">
-                <span className="text-xs text-zinc-500">
+              <div className="pt-4 border-t border-zinc-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <span className="text-xs text-zinc-500 text-center sm:text-left">
                   Dica: Você pode trocar de dia da semana nas abas superiores para revisar todo o plano.
                 </span>
 
@@ -809,7 +809,7 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
                   type="button"
                   onClick={handleSalvarPlano}
                   disabled={savingPlano}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold text-xs tracking-wide shadow-lg shadow-emerald-950/50 border border-emerald-500/30 flex items-center gap-2 cursor-pointer transition-all disabled:opacity-50"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold text-xs tracking-wide shadow-lg shadow-emerald-950/50 border border-emerald-500/30 flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
                 >
                   {savingPlano ? (
                     <>
@@ -892,20 +892,20 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
               return (
                 <div
                   key={plano.id}
-                  className="p-5 rounded-2xl bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800 hover:border-rose-500/50 transition-all flex flex-col justify-between gap-4 group shadow-lg"
+                  className="p-4 sm:p-5 rounded-2xl bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800 hover:border-rose-500/50 transition-all flex flex-col justify-between gap-3 sm:gap-4 group shadow-lg"
                 >
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-bold text-white group-hover:text-rose-400 transition-colors">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-sm font-bold text-white group-hover:text-rose-400 transition-colors truncate">
                         {titulo}
                       </span>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-950/80 text-rose-300 border border-rose-500/30 font-semibold">
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-950/80 text-rose-300 border border-rose-500/30 font-semibold shrink-0">
                         Salvo no Banco
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2 text-xs text-zinc-400">
-                      <Calendar className="w-3.5 h-3.5 text-zinc-500" />
+                      <Calendar className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
                       <span>Gerado em {dataFormatada}</span>
                     </div>
                   </div>
@@ -914,16 +914,16 @@ export const PlanoAlimentarSection: React.FC<PlanoAlimentarSectionProps> = ({
                     <button
                       type="button"
                       onClick={() => handleCarregarHistoricoParaEdicao(plano)}
-                      className="px-3.5 py-2 rounded-xl bg-zinc-800 hover:bg-rose-600 text-zinc-300 hover:text-white text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer"
+                      className="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-zinc-800 hover:bg-rose-600 text-zinc-300 hover:text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
-                      <Eye className="w-3.5 h-3.5" />
+                      <Eye className="w-3.5 h-3.5 shrink-0" />
                       <span>Visualizar / Editar</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setDeletingId(plano.id)}
-                      className="p-2 rounded-xl text-zinc-500 hover:text-rose-400 hover:bg-rose-950/30 transition-colors cursor-pointer"
+                      className="p-2 rounded-xl text-zinc-500 hover:text-rose-400 hover:bg-rose-950/30 transition-colors cursor-pointer shrink-0"
                       title="Excluir este plano"
                     >
                       <Trash2 className="w-4 h-4" />

@@ -3,6 +3,7 @@ import { authClient, type User } from './lib/auth';
 import { LoginCard } from './components/LoginCard';
 import { RegisterCard } from './components/RegisterCard';
 import { Dashboard } from './components/Dashboard';
+import { InstallPWABanner } from './components/InstallPWABanner';
 import { Loader2 } from 'lucide-react';
 
 export function App() {
@@ -38,7 +39,12 @@ export function App() {
 
   // Se já estiver logado, exibe diretamente o Dashboard
   if (currentUser) {
-    return <Dashboard user={currentUser} onLogout={() => setCurrentUser(null)} />;
+    return (
+      <>
+        <Dashboard user={currentUser} onLogout={() => setCurrentUser(null)} />
+        <InstallPWABanner />
+      </>
+    );
   }
 
   // Telas públicas de Autenticação (Login / Cadastro)
@@ -66,8 +72,12 @@ export function App() {
       <footer className="py-4 text-center text-xs text-zinc-600 relative z-10">
         &copy; {new Date().getFullYear()} NutriPadel — Sistema de Gestão Nutricional Integrado ao Neon
       </footer>
+
+      {/* PWA Install Banner */}
+      <InstallPWABanner />
     </div>
   );
 }
 
 export default App;
+

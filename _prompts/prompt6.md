@@ -67,7 +67,7 @@ O formato do JSON retornado deve seguir exatamente esta estrutura:
 
 # NÃO FAZER
 - Não faça chamadas diretas para a API do Gemini a partir do código do lado do cliente (frontend).
-- Não hardcodeie a estrutura de dados em inglês se a exibição final para o usuário é em português.
+- Não hardcode a estrutura de dados em inglês se a exibição final para o usuário é em português.
 - Não limpe o histórico de planos antigos ao salvar um novo; trate cada geração como um novo registro histórico.
 
 ---

@@ -178,7 +178,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       </div>
 
       {/* Main Content Viewport */}
-      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-y-auto max-w-7xl mx-auto w-full relative z-10">
+      <main className="flex-1 min-w-0 p-3.5 sm:p-6 lg:p-8 pb-32 sm:pb-24 overflow-y-auto max-w-7xl mx-auto w-full relative z-10">
         {currentView === 'dashboard' && (
           <DashboardView
             user={user}

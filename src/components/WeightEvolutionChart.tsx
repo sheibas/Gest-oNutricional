@@ -81,13 +81,13 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
   const primeiroPeso = points[0].peso;
   const variacaoTotal = Number((pesoAtual - primeiroPeso).toFixed(1));
 
-  // Dimensões do SVG
-  const width = 760;
-  const height = 220;
-  const paddingLeft = 55;
-  const paddingRight = 35;
+  // Dimensões do SVG viewBox
+  const width = 680;
+  const height = 230;
+  const paddingLeft = 52;
+  const paddingRight = 45;
   const paddingTop = 25;
-  const paddingBottom = 40;
+  const paddingBottom = 42;
 
   const chartWidth = width - paddingLeft - paddingRight;
   const chartHeight = height - paddingTop - paddingBottom;
@@ -140,9 +140,9 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
   });
 
   return (
-    <div className="w-full glass-panel rounded-3xl p-5 sm:p-7 border border-zinc-800 text-left space-y-4">
+    <div className="w-full glass-panel rounded-3xl p-4 sm:p-7 border border-zinc-800 text-left space-y-4">
       {/* Header com Estatísticas */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-zinc-800/80">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-3 border-b border-zinc-800/80">
         <div>
           <div className="flex items-center gap-2">
             <div className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
@@ -155,41 +155,41 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
           </p>
         </div>
 
-        {/* Resumo Numérico */}
-        <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
+        {/* Resumo Numérico Responsivo (Grid 3 colunas no celular / flex no desktop) */}
+        <div className="grid grid-cols-3 sm:flex sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
           {pesoInicial !== null && pesoInicial !== undefined && (
-            <div className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-zinc-900/80 border border-zinc-800">
-              <span className="text-[10px] uppercase font-bold text-zinc-400 block">Inicial</span>
-              <span className="text-sm sm:text-base font-extrabold text-zinc-300">{pesoInicial} kg</span>
+            <div className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-zinc-900/80 border border-zinc-800 text-center sm:text-left">
+              <span className="text-[10px] uppercase font-bold text-zinc-400 block truncate">Inicial</span>
+              <span className="text-xs sm:text-base font-extrabold text-zinc-300">{pesoInicial} kg</span>
             </div>
           )}
 
-          <div className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-zinc-900/80 border border-zinc-800">
-            <span className="text-[10px] uppercase font-bold text-zinc-400 block">Atual</span>
-            <span className="text-sm sm:text-base font-extrabold text-white">{pesoAtual} kg</span>
+          <div className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-zinc-900/80 border border-zinc-800 text-center sm:text-left">
+            <span className="text-[10px] uppercase font-bold text-zinc-400 block truncate">Atual</span>
+            <span className="text-xs sm:text-base font-extrabold text-white">{pesoAtual} kg</span>
           </div>
 
-          <div className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-zinc-900/80 border border-zinc-800">
-            <span className="text-[10px] uppercase font-bold text-zinc-400 block">Variação Total</span>
-            <div className="flex items-center gap-1">
+          <div className="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-zinc-900/80 border border-zinc-800 text-center sm:text-left">
+            <span className="text-[10px] uppercase font-bold text-zinc-400 block truncate">Variação</span>
+            <div className="flex items-center justify-center sm:justify-start gap-1">
               {variacaoTotal < 0 ? (
                 <>
-                  <TrendingDown className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-sm sm:text-base font-extrabold text-emerald-400">
+                  <TrendingDown className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span className="text-xs sm:text-base font-extrabold text-emerald-400">
                     {variacaoTotal} kg
                   </span>
                 </>
               ) : variacaoTotal > 0 ? (
                 <>
-                  <TrendingUp className="w-3.5 h-3.5 text-rose-400" />
-                  <span className="text-sm sm:text-base font-extrabold text-rose-400">
+                  <TrendingUp className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                  <span className="text-xs sm:text-base font-extrabold text-rose-400">
                     +{variacaoTotal} kg
                   </span>
                 </>
               ) : (
                 <>
-                  <Minus className="w-3.5 h-3.5 text-zinc-400" />
-                  <span className="text-sm sm:text-base font-extrabold text-zinc-300">0.0 kg</span>
+                  <Minus className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+                  <span className="text-xs sm:text-base font-extrabold text-zinc-300">0.0 kg</span>
                 </>
               )}
             </div>
@@ -197,17 +197,18 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
         </div>
       </div>
 
-      {/* SVG Container Interativo */}
-      <div className="relative w-full overflow-x-auto select-none bg-zinc-950/70 rounded-2xl p-2 border border-zinc-800/80">
+      {/* SVG Container Interativo 100% Responsivo */}
+      <div className="relative w-full select-none bg-zinc-950/80 rounded-2xl p-2 sm:p-4 border border-zinc-800/80 overflow-hidden">
         <svg
           viewBox={`0 0 ${width} ${height}`}
-          className="w-full h-auto min-w-[500px] overflow-visible"
+          className="w-full h-auto block"
+          style={{ maxHeight: '280px' }}
         >
           <defs>
             {/* Gradiente da área do gráfico */}
             <linearGradient id="weightAreaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#e11d48" stopOpacity="0.4" />
-              <stop offset="70%" stopColor="#be123c" stopOpacity="0.08" />
+              <stop offset="0%" stopColor="#e11d48" stopOpacity="0.45" />
+              <stop offset="70%" stopColor="#be123c" stopOpacity="0.1" />
               <stop offset="100%" stopColor="#be123c" stopOpacity="0.0" />
             </linearGradient>
 
@@ -234,7 +235,7 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
                 x={paddingLeft - 8}
                 y={gl.y + 4}
                 textAnchor="end"
-                className="text-[11px] fill-zinc-500 font-semibold"
+                className="text-[12px] fill-zinc-500 font-semibold"
               >
                 {gl.val}
               </text>
@@ -257,7 +258,7 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
             />
           )}
 
-          {/* Pontos Clicáveis/Hover */}
+          {/* Pontos Clicáveis / Touch / Hover */}
           {coords.map((c, i) => {
             const isHovered = hoveredPoint === c.point;
 
@@ -267,8 +268,17 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
                 className="cursor-pointer group"
                 onMouseEnter={() => setHoveredPoint(c.point)}
                 onMouseLeave={() => setHoveredPoint(null)}
+                onClick={() => setHoveredPoint(isHovered ? null : c.point)}
               >
-                {/* Linha vertical ao passar o mouse */}
+                {/* Área de toque maior para facilitar no mobile */}
+                <circle
+                  cx={c.x}
+                  cy={c.y}
+                  r={16}
+                  fill="transparent"
+                />
+
+                {/* Linha vertical ao passar o mouse ou tocar */}
                 {isHovered && (
                   <line
                     x1={c.x}
@@ -286,15 +296,15 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
                 <circle
                   cx={c.x}
                   cy={c.y}
-                  r={isHovered ? 8 : 5}
-                  className="fill-rose-500/30 transition-all duration-200"
+                  r={isHovered ? 9 : 6}
+                  className="fill-rose-500/35 transition-all duration-200"
                 />
 
                 {/* Ponto Central */}
                 <circle
                   cx={c.x}
                   cy={c.y}
-                  r={isHovered ? 5 : 4}
+                  r={isHovered ? 5.5 : 4.5}
                   className="fill-white stroke-rose-600 stroke-[2.5px] transition-all duration-200"
                 />
 
@@ -303,8 +313,8 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
                   x={c.x}
                   y={height - 12}
                   textAnchor="middle"
-                  className={`text-[10px] font-semibold transition-colors ${
-                    isHovered ? 'fill-white font-bold' : 'fill-zinc-500'
+                  className={`text-[11px] font-semibold transition-colors ${
+                    isHovered ? 'fill-white font-bold' : 'fill-zinc-400'
                   }`}
                 >
                   {c.point.displayDate}
@@ -314,18 +324,18 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
           })}
         </svg>
 
-        {/* Floating Tooltip no Hover */}
+        {/* Floating Tooltip no Hover / Toque */}
         {hoveredPoint && (
-          <div className="absolute top-3 right-4 bg-zinc-900/95 border border-rose-500/40 rounded-2xl p-3 shadow-xl backdrop-blur-md text-xs animate-fade-in pointer-events-none">
-            <div className="flex items-center gap-1.5 text-zinc-400 text-[11px] mb-1 font-medium">
-              <Calendar className="w-3 h-3 text-rose-400" />
+          <div className="absolute top-2 right-2 sm:top-3 sm:right-4 bg-zinc-900/95 border border-rose-500/50 rounded-2xl p-2.5 sm:p-3 shadow-2xl backdrop-blur-md text-xs animate-fade-in pointer-events-none z-10 max-w-[180px] sm:max-w-xs">
+            <div className="flex items-center gap-1.5 text-zinc-400 text-[10px] sm:text-[11px] mb-0.5 font-medium">
+              <Calendar className="w-3 h-3 text-rose-400 shrink-0" />
               <span>{hoveredPoint.displayDate}</span>
             </div>
-            <div className="text-sm font-extrabold text-white flex items-center gap-2">
+            <div className="text-xs sm:text-sm font-extrabold text-white flex items-center gap-1.5 sm:gap-2">
               <span>{hoveredPoint.peso} kg</span>
               {hoveredPoint.diffFromPrev !== undefined && (
                 <span
-                  className={`text-[11px] font-bold px-1.5 py-0.5 rounded-full ${
+                  className={`text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded-full ${
                     hoveredPoint.diffFromPrev < 0
                       ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/30'
                       : hoveredPoint.diffFromPrev > 0
@@ -345,3 +355,4 @@ export const WeightEvolutionChart: React.FC<WeightEvolutionChartProps> = ({
     </div>
   );
 };
+

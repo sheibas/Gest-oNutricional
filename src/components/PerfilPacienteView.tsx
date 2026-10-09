@@ -397,7 +397,7 @@ export const PerfilPacienteView: React.FC<PerfilPacienteViewProps> = ({
   }
 
   return (
-    <div className="space-y-6 animate-fade-in text-left pb-20 max-w-6xl mx-auto">
+    <div className="space-y-6 animate-fade-in text-left pb-28 sm:pb-20 max-w-6xl mx-auto">
       {/* Toast de Sucesso Flutuante */}
       {toastMessage && (
         <div className="fixed top-5 right-5 z-50 max-w-md w-full animate-bounce-short">
@@ -485,33 +485,36 @@ export const PerfilPacienteView: React.FC<PerfilPacienteViewProps> = ({
         </div>
       )}
 
-      {/* Navegação entre as 3 Seções Principais (Prompt 5) */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-zinc-950 border border-zinc-800">
+      {/* Navegação entre as 3 Seções Principais (Responsiva em celulares) */}
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-1.5 rounded-2xl bg-zinc-950 border border-zinc-800">
         <button
           type="button"
           onClick={() => setActiveSection('dados')}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+          className={`flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl text-[11px] sm:text-sm font-semibold transition-all cursor-pointer ${
             activeSection === 'dados'
               ? 'bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-md shadow-rose-950/30'
               : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/60'
           }`}
         >
-          <UserIcon className="w-4 h-4" />
-          <span>1. Dados do Paciente</span>
+          <UserIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+          <span className="truncate">
+            <span className="hidden sm:inline">1. Dados do Paciente</span>
+            <span className="sm:hidden">1. Dados</span>
+          </span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveSection('consultas')}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+          className={`flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl text-[11px] sm:text-sm font-semibold transition-all cursor-pointer ${
             activeSection === 'consultas'
               ? 'bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-md shadow-rose-950/30'
               : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/60'
           }`}
         >
-          <CalendarCheck className="w-4 h-4" />
-          <span>2. Consultas</span>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-zinc-900/80 text-zinc-300 font-bold border border-zinc-700">
+          <CalendarCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+          <span className="truncate">2. Consultas</span>
+          <span className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full bg-zinc-900/80 text-zinc-300 font-bold border border-zinc-700 shrink-0">
             {consultas.length}
           </span>
         </button>
@@ -519,15 +522,18 @@ export const PerfilPacienteView: React.FC<PerfilPacienteViewProps> = ({
         <button
           type="button"
           onClick={() => setActiveSection('planos')}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+          className={`flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 px-2 sm:px-4 rounded-xl text-[11px] sm:text-sm font-semibold transition-all cursor-pointer ${
             activeSection === 'planos'
               ? 'bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-md shadow-rose-950/30'
               : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/60'
           }`}
         >
-          <Utensils className="w-4 h-4" />
-          <span>3. Planos Alimentares</span>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-zinc-900/80 text-zinc-300 font-bold border border-zinc-700">
+          <Utensils className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+          <span className="truncate">
+            <span className="hidden sm:inline">3. Planos Alimentares</span>
+            <span className="sm:hidden">3. Planos</span>
+          </span>
+          <span className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full bg-zinc-900/80 text-zinc-300 font-bold border border-zinc-700 shrink-0">
             {planos.length}
           </span>
         </button>
